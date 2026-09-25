@@ -1,24 +1,34 @@
-import { useAuth } from '@clerk/react'
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const { isLoaded, isSignedIn } = useAuth();
-
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-500">Yuklanmoqda...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-carbon">
       <Navbar />
       <main className="flex-1">
-        {isSignedIn ? <Dashboard /> : <Home />}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </main>
     </div>
   );

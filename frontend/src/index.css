@@ -1,1 +1,18 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+@theme {
+  /* Ranglar — CarVibe palitra */
+  --color-carbon: #0D0D0D;
+  --color-night: #1A1A1A;
+  --color-racing-red: #E10600;
+  --color-racing-red-dark: #A80F2A;
+  --color-steel: #9A9EA3;
+  --color-volt: #F2C200;
+  --color-forest: #2E7D32;
+  --color-paper: #F5F5F5;
+
+  /* Shriftlar */
+  --font-display: 'Poppins', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+}

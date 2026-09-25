@@ -1,26 +1,56 @@
-import { SignInButton, SignUpButton } from '@clerk/react';
+import { SignInButton, SignUpButton, useAuth } from "@clerk/react";
+import { Navigate } from "react-router-dom";
+import heroImg from "../assets/hero-f40.jpg";
 
 function Home() {
+  const { isLoaded, isSignedIn } = useAuth();
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-carbon">
+        <p className="text-steel">Yuklanmoqda...</p>
+      </div>
+    );
+  }
+
+  if (isSignedIn) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
-      <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-        Collection App'ga Xush Kelibsiz
-      </h1>
-      <p className="text-lg text-gray-600 max-w-xl mb-8">
-        Shaxsiy kolleksiyangizni yarating, saqlang va boshqaring.
-        Kirish yoki ro'yxatdan o'ting va boshlang.
-      </p>
-      <div className="flex flex-wrap gap-4 justify-center">
-        <SignUpButton mode="modal">
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
-            Boshlash
-          </button>
-        </SignUpButton>
-        <SignInButton mode="modal">
-          <button className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition font-medium">
-            Kirish
-          </button>
-        </SignInButton>
+    <div
+      className="relative flex flex-col items-center justify-center min-h-screen px-4 text-center bg-cover"
+      style={{
+        backgroundImage: `url(${heroImg})`,
+        backgroundPosition: "center 75%",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/55" />
+
+      <div className="relative z-10">
+        <h1 className="font-display text-5xl md:text-7xl font-extrabold text-paper mb-4 tracking-tight">
+          Car<span className="text-racing-red">Vibe</span>
+        </h1>
+        <p className="font-sans text-lg md:text-xl text-steel max-w-xl mb-10 mx-auto">
+          Sevimli avtomobillaringiz — bir joyda.
+          <br />
+          Xush kelibsiz.
+        </p>
+        <div className="flex flex-wrap gap-4 justify-center">
+          <SignUpButton mode="modal">
+            <button
+              className="px-8 py-3 rounded-lg text-white font-semibold transition hover:brightness-110"
+              style={{ backgroundColor: "#E10600" }}
+            >
+              Boshlash
+            </button>
+          </SignUpButton>
+          <SignInButton mode="modal">
+            <button className="px-8 py-3 rounded-lg border-2 border-white/70 text-white font-semibold transition hover:bg-white/10">
+              Kirish
+            </button>
+          </SignInButton>
+        </div>
       </div>
     </div>
   );
