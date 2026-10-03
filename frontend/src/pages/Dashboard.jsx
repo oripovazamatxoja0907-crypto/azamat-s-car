@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/react";
+import { useAuth, useUser } from "@clerk/react";
 
 const API_URL = "http://localhost:3000";
 const FALLBACK_IMG = "https://placehold.co/600x400/1a1a1a/666?text=Rasm+yo'q";
@@ -8,7 +8,7 @@ function CarCard({ car }) {
   return (
     <div className="group bg-night rounded-2xl border border-steel/20 overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-red-500/50 hover:shadow-xl hover:shadow-red-500/10">
       {/* Rasm */}
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="relative aspect-16/10 overflow-hidden">
         <img
           src={car.imageUrl}
           alt={`${car.brand} ${car.model}`}
@@ -18,7 +18,7 @@ function CarCard({ car }) {
           }}
           className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
 
         <span className="absolute top-3 left-3 rounded-full bg-black/60 backdrop-blur px-3 py-1 text-xs font-medium text-paper">
           {car.category}
@@ -76,7 +76,7 @@ function CarCard({ car }) {
 function SkeletonCard() {
   return (
     <div className="bg-night rounded-2xl border border-steel/20 overflow-hidden animate-pulse">
-      <div className="aspect-[16/10] bg-steel/10" />
+      <div className="aspect-16/10 bg-steel/10" />
       <div className="p-5 space-y-3">
         <div className="h-5 w-2/3 rounded bg-steel/10" />
         <div className="h-4 w-full rounded bg-steel/10" />
@@ -88,16 +88,46 @@ function SkeletonCard() {
 
 function Dashboard() {
   const { user } = useUser();
+  const { getToken, isLoaded, isSignedIn } = useAuth();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`${API_URL}/api/cars`)
-      .then((res) => res.json())
-      .then((json) => setCars(json.data || []))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, []);
+    if (!isLoaded) return;
+
+    if (!isSignedIn) {
+      setError("Avval tizimga kiring");
+      setLoading(false);
+      return;
+    }
+
+    async function loadCars() {
+      try {
+        setError("");
+        const token = await getToken();
+        const res = await fetch(`${API_URL}/api/cars`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const json = await res.json();
+
+        if (!res.ok) {
+          console.error("Xato:", res.status, json);
+          setError(`Xato ${res.status}: ${json.error || "Noma'lum xato"}`);
+          return;
+        }
+
+        setCars(json.data || []);
+      } catch (err) {
+        console.error(err);
+        setError("Serverga ulanib bo'lmadi. Backend ishlayaptimi?");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadCars();
+  }, [isLoaded, isSignedIn]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -110,7 +140,13 @@ function Dashboard() {
         </p>
       </div>
 
-      {!loading && cars.length === 0 && (
+      {error && (
+        <div className="mb-6 rounded-2xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-400">
+          {error}
+        </div>
+      )}
+
+      {!loading && !error && cars.length === 0 && (
         <div className="bg-night rounded-2xl border border-steel/20 p-8 text-center">
           <h2 className="font-display text-xl font-semibold text-paper mb-2">
             Hozircha hech narsa yo'q
