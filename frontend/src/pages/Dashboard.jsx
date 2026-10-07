@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/react";
 
-const API_URL = "http://localhost:3000";
+const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
 const FALLBACK_IMG = "https://placehold.co/600x400/1a1a1a/666?text=Rasm+yo'q";
 
 function CarCard({ car }) {
