@@ -19,7 +19,7 @@ return natija * 2;
 }
 ikkilantir().then(console.log); 
 
-
+///////////////////////////////////////////////////////////
   
 function yaratUser(ism, yosh = 18, rol = 'user') {
   return { ism, yosh, rol }; 

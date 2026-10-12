@@ -1,5 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/react";
+
+const navLinkClass = ({ isActive }) =>
+  `text-sm font-semibold transition ${
+    isActive ? "text-white" : "text-white/70 hover:text-white"
+  }`;
 
 function Navbar() {
   return (
@@ -30,12 +35,17 @@ function Navbar() {
           </Show>
 
           <Show when="signed-in">
-            <Link
-              to="/profile"
-              className="text-sm font-semibold text-white/80 hover:text-white transition"
-            >
-              Profil
-            </Link>
+            <nav className="flex items-center gap-3 sm:gap-6">
+              <NavLink to="/dashboard" className={navLinkClass}>
+                Dashboard
+              </NavLink>
+              <NavLink to="/mycars" className={navLinkClass}>
+                Mashinalarim
+              </NavLink>
+              <NavLink to="/profile" className={navLinkClass}>
+                Profil
+              </NavLink>
+            </nav>
             <UserButton afterSignOutUrl="/" />
           </Show>
         </div>

@@ -3,6 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const { clerkMiddleware } = require("@clerk/express");
 const carsRoutes = require("./routes/cars.routes");
+const catalogRoutes = require("./routes/catalog.routes");
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/cars", carsRoutes);
+app.use("/api/catalog", catalogRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
