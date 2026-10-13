@@ -66,3 +66,26 @@ async function main() {
 }
 
 main();
+
+
+
+
+//////////////////////////////////////////
+
+const sonlar = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+da
+const natija = sonlar
+  .filter((son) => son % 2 === 0) 
+  .map((son) => son * 2)          
+  .sort((a, b) => b - a);         
+console.log(natija); 
+
+const juftlar = sonlar.filter((son) => son % 2 === 0);
+console.log("1) filter:", juftlar);
+
+const ikkilangan = juftlar.map((son) => son * 2);
+console.log("2) map:   ", ikkilangan);
+
+const saralangan = [...ikkilangan].sort((a, b) => b - a);
+console.log("3) sort:  ", saralangan);
